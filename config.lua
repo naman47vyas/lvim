@@ -18,6 +18,34 @@ lvim.builtin.treesitter.ensure_installed = {
 lvim.plugins = {
   "olexsmir/gopher.nvim",
   "leoluz/nvim-dap-go",
+  {
+		"NachoNievaG/atac.nvim",
+		dependencies = { "akinsho/toggleterm.nvim" },
+		config = function()
+			require("atac").setup({
+			})
+		end,
+	},
+-- lazydocker.nvim
+{
+  "mgierada/lazydocker.nvim",
+  dependencies = { "akinsho/toggleterm.nvim" },
+  config = function()
+    require("lazydocker").setup({
+	    border = "curved", -- valid options are "single" | "double" | "shadow" | "curved"
+    })
+  end,
+  event = "BufRead",
+  keys = {
+    {
+      "<leader>lzd",
+      function()
+        require("lazydocker").open()
+      end,
+      desc = "Open Lazydocker floating window",
+    },
+  },
+},
 }
 
 ------------------------
@@ -105,3 +133,15 @@ gopher.setup {
 
 -- Remaps --------------------------------------------------------
 lvim.keys.insert_mode["jk"] = "<Esc>"
+
+
+-- Search --------------------------------------------------------
+lvim.builtin.which_key.mappings["sF"] = { "<cmd>Telescope find_files hidden=true no_ignore=true<cr>", "Find File Everywhere" }
+lvim.builtin.which_key.mappings["sT"] = {
+function()
+require("telescope.builtin").live_grep {
+additional_args = function(args) return vim.list_extend(args, { "--hidden", "--no-ignore" }) end,
+}
+end,
+"Text Everywhere",
+} 
